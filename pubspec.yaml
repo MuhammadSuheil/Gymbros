@@ -20,11 +20,20 @@ dependencies:
   google_fonts: ^6.3.2
   flutter_local_notifications: ^19.5.0
   flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logoIcon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/launcherIcon.png"
 
 
 flutter:
