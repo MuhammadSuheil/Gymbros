@@ -21,12 +21,16 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   flutter_native_splash: ^2.4.6
   flutter_launcher_icons: ^0.14.4
+  firebase_auth_mocks: ^0.14.2
+  mocktail: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.4
+  mocktail: ^1.0.3
+  firebase_core_platform_interface: ^6.0.0
 
 flutter_icons:
   android: true

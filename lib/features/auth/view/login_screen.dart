@@ -6,6 +6,7 @@ import '../../../core/widgets/dialogs.dart';
 import 'package:gymbros/core/constants/app_colors.dart';
 import '../../main_screen/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../core/widgets/custom_page_route.dart';
 
 
 class LoginScreen extends StatefulWidget {

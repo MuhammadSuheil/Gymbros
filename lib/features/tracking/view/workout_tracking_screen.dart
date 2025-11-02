@@ -13,6 +13,7 @@ import '../../exercise_detail/view/exercise_detail_screen.dart';
 import '../../workout_summary/view/workout_summary_screen.dart';
 import '../../../core/widgets/dialogs.dart';
 import '../../../core/services/notification_service.dart';
+import '../../../core/widgets/custom_page_route.dart';
 
 class WorkoutTrackingScreen extends StatefulWidget {
   const WorkoutTrackingScreen({super.key});
@@ -237,7 +238,10 @@ class _WorkoutTrackingScreenState extends State<WorkoutTrackingScreen> {
   void _navigateAndAddExercise() async {
     final selectedExercise = await Navigator.push<ExerciseModel>(
       context,
-      MaterialPageRoute(builder: (context) => const ExerciseSelectionScreen()),
+      CustomPageRoute(
+        child: const ExerciseSelectionScreen(),
+        direction: AxisDirection.up, 
+      ),
     );
 
     if (selectedExercise != null && mounted) {

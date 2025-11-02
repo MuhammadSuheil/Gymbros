@@ -6,6 +6,7 @@ import '../history/view/history_screen.dart';
 import '../tracking/view/workout_tracking_screen.dart';
 import '../streak/view/streak_screen.dart';
 import '../profile/view/profile_screen.dart';
+import '../../core/widgets/custom_page_route.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -46,8 +47,11 @@ class _MainScreenState extends State<MainScreen> {
             onPressed: () {
                Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const WorkoutTrackingScreen()),
-               );
+                CustomPageRoute(
+                  child: const WorkoutTrackingScreen(),
+                  direction: AxisDirection.up, 
+                ),
+              );
             },
             shape: HexagonBorder(side: BorderSide(
                 color: AppColors.surface,
