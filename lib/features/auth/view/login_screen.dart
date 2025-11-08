@@ -4,10 +4,7 @@ import 'register_screen.dart';
 import '../viewmodel/auth_viewmodel.dart';
 import '../../../core/widgets/dialogs.dart';
 import 'package:gymbros/core/constants/app_colors.dart';
-import '../../main_screen/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/widgets/custom_page_route.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,67 +26,103 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLogin(BuildContext context) async {
-  print("[LoginScreen] Login button pressed.");
-  final viewModel = Provider.of<AuthViewModel>(context, listen: false);
-  viewModel.resetErrorState();
+    print("[LoginScreen] Login button pressed.");
+    final viewModel = Provider.of<AuthViewModel>(context, listen: false);
+    viewModel.resetErrorState();
 
-  if (_formKey.currentState!.validate()) {
-    bool success = await viewModel.signInWithEmail(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-
+    if (_formKey.currentState!.validate()) {
+      bool success = await viewModel.signInWithEmail(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      
+      // HAPUS NAVIGASI MANUAL - Biarkan StreamBuilder di AuthWrapper yang handle
+      if (success) {
+        print("[LoginScreen] Login success, waiting for AuthWrapper to navigate...");
+      }
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthViewModel>(
       builder: (context, viewModel, child) {
-         WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           if (viewModel.state == AuthState.Error && viewModel.errorMessage.isNotEmpty) {
             showErrorPopup(context, 'Login Failed', viewModel.errorMessage);
             viewModel.resetErrorState();
           }
         });
         return Scaffold(
-          body: Center( child: SingleChildScrollView( padding: const EdgeInsets.all(24.0),
-              child: Form( key: _formKey, child: Column(
-                   children: [
-                    SizedBox(height: 60,),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SizedBox(height: 60),
                     Column(
                       children: [
-                        Image.asset('assets/images/notxt.png', height: 60,),
-                        Image.asset('assets/images/gymbrostxt.png', height: 120,),
+                        Image.asset('assets/images/notxt.png', height: 60),
+                        Image.asset('assets/images/gymbrostxt.png', height: 120),
                         const SizedBox(height: 24),
                       ],
                     ),
-                    SizedBox(height: 16,),
+                    SizedBox(height: 16),
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
                             text: 'Welcome to ',
-                            style:  GoogleFonts.outfit(
-                              color: AppColors.onPrimary, 
+                            style: GoogleFonts.outfit(
+                              color: AppColors.onPrimary,
                               fontSize: 20,
                             ),
                           ),
                           TextSpan(
                             text: ' GymBros',
-                            style:  GoogleFonts.outfit(
-                              color: AppColors.primary, 
+                            style: GoogleFonts.outfit(
+                              color: AppColors.primary,
                               fontSize: 20,
-                              fontWeight: FontWeight.bold, 
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 32),
-                    TextFormField(style: TextStyle(color: AppColors.onPrimary), controller: _emailController, decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.onSecondary)), keyboardType: TextInputType.emailAddress, validator: (value) { if (value == null || value.isEmpty || !value.contains('@')) { return 'Masukkan email yang valid'; } return null; },),
+                    TextFormField(
+                      style: TextStyle(color: AppColors.onPrimary),
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email_outlined, color: AppColors.onSecondary),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || !value.contains('@')) {
+                          return 'Masukkan email yang valid';
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(height: 16),
-                    TextFormField(style: TextStyle(color: AppColors.onPrimary), controller: _passwordController, decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_outline, color: AppColors.onSecondary,)), obscureText: true, validator: (value) { if (value == null || value.isEmpty || value.length < 6) { return 'Password minimal 6 karakter'; } return null; },),
+                    TextFormField(
+                      style: TextStyle(color: AppColors.onPrimary),
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock_outline, color: AppColors.onSecondary),
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || value.length < 6) {
+                          return 'Password minimal 6 karakter';
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -100,37 +133,53 @@ class _LoginScreenState extends State<LoginScreen> {
                         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       onPressed: viewModel.state == AuthState.Loading ? null : () => _handleLogin(context),
-                      child: viewModel.state == AuthState.Loading ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),) : const Text('Login'),
+                      child: viewModel.state == AuthState.Loading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            )
+                          : const Text('Login'),
                     ),
                     const SizedBox(height: 16),
-                    TextButton( onPressed: viewModel.state == AuthState.Loading ? null : () { Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => const RegisterScreen()), ); }, 
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Already have an account?',
-                            style:  GoogleFonts.outfit(
-                              color: AppColors.onPrimary, 
-                              fontSize: 16,
+                    TextButton(
+                      onPressed: viewModel.state == AuthState.Loading
+                          ? null
+                          : () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                              );
+                            },
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Don\'t have an account?',
+                              style: GoogleFonts.outfit(
+                                color: AppColors.onPrimary,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            text: ' Login here',
-                            style:  GoogleFonts.outfit(
-                              color: AppColors.primary, 
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold, 
+                            TextSpan(
+                              text: ' Register here',
+                              style: GoogleFonts.outfit(
+                                color: AppColors.primary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),),
+                    ),
                   ],
-              ),),
-           ),),
+                ),
+              ),
+            ),
+          ),
         );
       },
     );
   }
 }
-

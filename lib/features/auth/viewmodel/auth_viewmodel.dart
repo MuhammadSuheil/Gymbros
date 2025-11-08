@@ -17,21 +17,22 @@ class AuthViewModel extends ChangeNotifier {
   fb.User? get currentUser => _currentUser;
 
   AuthViewModel() {
-    _currentUser = _authRepository.currentUser; 
-
-    _authRepository.authStateChanges.listen((fb.User? user) {
-      print("[AuthViewModel] Auth state changed via listener: ${user?.uid ?? 'null'}");
-      
-      _currentUser = user; 
-      
-      notifyListeners(); 
-    });
+    _currentUser = _authRepository.currentUser;
+    
+    // HAPUS LISTENER INI - Biarkan StreamBuilder di main.dart yang handle
+    // _authRepository.authStateChanges.listen((fb.User? user) {
+    //   print("[AuthViewModel] Auth state changed via listener: ${user?.uid ?? 'null'}");
+    //   _currentUser = user;
+    //   notifyListeners();
+    // });
+    
+    print("[AuthViewModel] Initialized without auth listener");
   }
 
   void _setState(AuthState newState) {
     if (_state != newState) {
       _state = newState;
-       print("[AuthViewModel] Notifying listeners for state: $_state");
+      print("[AuthViewModel] State changed to: $_state");
       notifyListeners();
     }
   }
@@ -49,8 +50,9 @@ class AuthViewModel extends ChangeNotifier {
         password: password,
       );
       print("[AuthViewModel] Sign in successful for: $email");
+      // JANGAN update _currentUser manual - biarkan StreamBuilder yang update
       success = true;
-      _setState(AuthState.Idle); 
+      _setState(AuthState.Idle);
     } catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
       print("[AuthViewModel] Sign in failed: $_errorMessage");
@@ -59,7 +61,7 @@ class AuthViewModel extends ChangeNotifier {
     }
     return success;
   }
-  
+
   Future<bool> createUserWithEmail({
     required String email,
     required String password,
@@ -72,36 +74,37 @@ class AuthViewModel extends ChangeNotifier {
         email: email,
         password: password,
       );
-       print("[AuthViewModel] Registration successful for: $email");
-       success = true;
-       _setState(AuthState.Idle); 
+      print("[AuthViewModel] Registration successful for: $email");
+      _currentUser = _authRepository.currentUser;
+      success = true;
+      _setState(AuthState.Idle);
     } catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
       print("[AuthViewModel] Registration failed: $_errorMessage");
       _setState(AuthState.Error);
       success = false;
     }
-     return success;
+    return success;
   }
-    
-   void resetErrorState() {
-     if (_state == AuthState.Error) {
-        _setState(AuthState.Idle);
-     }
-   }
+
+  void resetErrorState() {
+    if (_state == AuthState.Error) {
+      _setState(AuthState.Idle);
+    }
+  }
 
   Future<void> signOut() async {
     print("[AuthViewModel] Attempting sign out...");
     _setState(AuthState.Loading);
     try {
       await _authRepository.signOut();
+      _currentUser = null;
       _setState(AuthState.Idle);
       print("[AuthViewModel] Sign out successful.");
     } catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
-       print("[AuthViewModel] Sign out failed: $_errorMessage");
-       _setState(AuthState.Error);
+      print("[AuthViewModel] Sign out failed: $_errorMessage");
+      _setState(AuthState.Error);
     }
   }
 }
-

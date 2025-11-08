@@ -68,6 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                        onPressed: () {
                          Navigator.of(dialogContext).pop(); 
                          authViewModel.signOut();
+                         print("[ProfileScreen] Logout called, waiting for AuthWrapper to navigate...");
                        },
                      ),
                    ],

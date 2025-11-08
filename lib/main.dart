@@ -106,19 +106,27 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final fb.FirebaseAuth auth = fb.FirebaseAuth.instance;
-
+    print("[AuthWrapper] Building...");
+    
     return StreamBuilder<fb.User?>(
-      stream: auth.authStateChanges(),
+      stream: fb.FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
+        print("[AuthWrapper] StreamBuilder state: ${snapshot.connectionState}");
+        print("[AuthWrapper] Has data: ${snapshot.hasData}, User: ${snapshot.data?.uid}");
+        
         if (snapshot.connectionState == ConnectionState.waiting) {
+          print("[AuthWrapper] Showing loading screen");
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
+        
         if (snapshot.hasData && snapshot.data != null) {
+          print("[AuthWrapper] User logged in, showing MainScreen");
           return const MainScreen();
         }
+        
+        print("[AuthWrapper] No user, showing LoginScreen");
         return const LoginScreen();
       },
     );
