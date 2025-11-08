@@ -61,12 +61,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icon(Icons.check_circle_outline_rounded, color: Colors.green, size: 60),
                     SizedBox(height: 16),
                     Text(
-                      'Registrasi Berhasil!',
+                      'Registration Successful!',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.onPrimary),
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Silakan login dengan akun baru Anda.',
+                      'Please log in with your new account.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: AppColors.onPrimary),
                     ),
@@ -83,10 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.of(dialogContext).pop();
                       if (mounted) {
                         // Navigasi ke login screen
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        );
+                        Navigator.pop(context);
                       }
                     },
                   ),
@@ -200,17 +197,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                             )
-                          : const Text('Daftar'),
+                          : const Text('Register'),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: viewModel.state == AuthState.Loading
                           ? null
                           : () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                              );
+                              Navigator.pop(context);
                             },
                       child: RichText(
                         text: TextSpan(

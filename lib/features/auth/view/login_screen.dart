@@ -36,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
       
-      // HAPUS NAVIGASI MANUAL - Biarkan StreamBuilder di AuthWrapper yang handle
       if (success) {
         print("[LoginScreen] Login success, waiting for AuthWrapper to navigate...");
       }
@@ -102,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty || !value.contains('@')) {
-                          return 'Masukkan email yang valid';
+                          return 'Enter a valid email';
                         }
                         return null;
                       },
@@ -118,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty || value.length < 6) {
-                          return 'Password minimal 6 karakter';
+                          return 'Password must be at least 6 characters';
                         }
                         return null;
                       },
@@ -146,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: viewModel.state == AuthState.Loading
                           ? null
                           : () {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const RegisterScreen()),
                               );

@@ -75,7 +75,6 @@ class AuthViewModel extends ChangeNotifier {
         password: password,
       );
       print("[AuthViewModel] Registration successful for: $email");
-      _currentUser = _authRepository.currentUser;
       success = true;
       _setState(AuthState.Idle);
     } catch (e) {
