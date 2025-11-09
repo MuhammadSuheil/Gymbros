@@ -6,6 +6,8 @@ import '../../tracking/viewmodel/workout_viewmodel.dart';
 import '../../../core/widgets/dialogs.dart';
 import 'package:gymbros/core/constants/app_colors.dart'; 
 import '../../main_screen/main_screen.dart';
+import '../../history/viewmodel/history_viewmodel.dart';
+import '../../streak/viewmodel/streak_viewmodel.dart';
 
 class WorkoutSummaryScreen extends StatefulWidget {
   final List<Map<String, dynamic>> setsData;
@@ -59,6 +61,10 @@ class _WorkoutSummaryScreenState extends State<WorkoutSummaryScreen> {
     );
 
     if (success && mounted) {
+      print("[SummaryScreen] Notifying other view models to refresh...");
+      await context.read<HistoryViewModel>().fetchHistory();
+      await context.read<StreakViewModel>().fetchAllStreakData();
+
       final bool? result = await showInfoPopup(
         context,
         'Success!',
@@ -66,10 +72,7 @@ class _WorkoutSummaryScreenState extends State<WorkoutSummaryScreen> {
       );
       
       if (result == true && mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-           MaterialPageRoute(builder: (context) => const MainScreen()), 
-           (Route<dynamic> route) => false
-        );
+        Navigator.of(context).popUntil((route) => route.isFirst);
       }
     } else if (!success && mounted) {
       showErrorPopup(context, 'Save Failed', viewModel.errorMessage);

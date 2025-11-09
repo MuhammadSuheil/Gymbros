@@ -94,16 +94,13 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> signOut() async {
     print("[AuthViewModel] Attempting sign out...");
-    _setState(AuthState.Loading);
     try {
       await _authRepository.signOut();
-      _currentUser = null;
-      _setState(AuthState.Idle);
       print("[AuthViewModel] Sign out successful.");
     } catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
       print("[AuthViewModel] Sign out failed: $_errorMessage");
-      _setState(AuthState.Error);
+      rethrow;
     }
   }
 }

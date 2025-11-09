@@ -20,7 +20,7 @@ import 'features/streak/viewmodel/streak_viewmodel.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/auth/view/login_screen.dart';
 
-const supabaseUrl = 'https://tbyjchwkedxhgkdefrco.supabase.co';
+const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
 
 final NotificationService notificationService = NotificationService();

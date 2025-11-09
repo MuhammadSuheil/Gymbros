@@ -1,30 +1,33 @@
-# 📱 Final Project Plans Review – Mobile Development Division
+# Gymbros - Fitness Tracker App
 
-## 📝 Final Project Plan
+<p align="center">
+  <img src="assets/images/logofull.png" width="300" alt="Gymbros Logo">
+</p>
 
-### 1. Project Title
-Gymbros - Fitness Tracker App
+Gymbros is a cross-platform fitness tracker application built with Flutter. It's designed to help users log, track, and analyze their workout sessions to achieve their fitness goals.
 
----
+**Problem Statement:** Many gym-goers, from beginners to experienced lifters, struggle with inconsistently logging their workouts. They often forget their previous performance (weights, reps), lose track of their progress over time, and find it difficult to stay motivated.
 
-### 2. Chosen Final Project Deliverable
-(Choose **one** from the options)  
-- [X] Mobile App on GitHub Repository (without publishing)  
-- [ ] Flutter/Dart Package published on pub.dev  
-- [ ] Mobile App published on Google Play Store  
+**SDG Alignment (SDG 3: Good Health and Well-being):** This project directly contributes to SDG 3 by providing users with the tools to systematically track their physical exercise, monitor their strength gains, and maintain consistency, promoting an active and healthy lifestyle.
 
-**Explanation:** This option is chosen to provide a centralized, accessible location for the project's source code, documentation, and installable builds. By using the [GitHub Releases](https://github.com/muhammadsuheil/gymbros/releases) feature, the app can be easily distributed for review and testing without the complexities of app store compliance.
+## 📥 Get the App
 
----
+You can download the latest version of the app from our GitHub Releases page:
 
-### 3. Problem Statement & SDG Alignment
-- **Problem Statement:** Many gym-goers, from beginners to experienced lifters, struggle with inconsistently logging their workouts. They often forget their previous performance (weights, reps), lose track of their progress over time, and find it difficult to stay motivated.
-- **Chosen SDG:** **SDG 3: Good Health and Well-being**
-- **Justification:** This project directly contributes to SDG 3 by promoting a healthy and active lifestyle. The `gymbros` app provides users with the tools to systematically track their physical exercise, monitor their strength gains, and maintain consistency. By offering features like workout logging, history tracking, and motivational streaks, the app encourages users to take an active role in their physical health, helping to ensure healthy lives and promote well-being.
+**[Download Latest Release](https://github.com/muhammadsuheil/gymbros/releases)**
 
----
+## ✨ Key Features
 
-### 4. Target Users & Use Cases
+- 🔐 **User Authentication**: Secure login and registration system using **Firebase Auth** and **Supabase Auth**.
+- 🏋️ **Workout Tracking**: Log sets, reps, and weight (kg/lbs) for each exercise in a session in real-time.
+- 📚 **Exercise Database**: Browse and select from a list of available exercises to add to your routine.
+- 📈 **History & Analytics**: Review previous workout sessions in detail.
+- 🔥 **Streak Tracking**: Monitor your consecutive workout days to stay motivated.
+- 👤 **Profile Management**: Manage user profile information.
+- 🔔 **Notifications**: Get reminders and notifications 
+
+## 👤 Target Users & Use Cases
+
 - **Target Users:**
   - Fitness enthusiasts, weightlifters, and bodybuilders.
   - Casual gym-goers who want to start tracking their progress.
@@ -32,56 +35,80 @@ Gymbros - Fitness Tracker App
 
 - **Use Cases:**
   - **Logging a Workout:** A user starts a new session, selects exercises (e.g., "Bench Press," "Squat"), and logs their sets, including the weight and number of repetitions for each.
-  - **Reviewing Progress:** A user navigates to the History screen to review a workout from last week, or filters to see all their "Bench Press" sessions from the last three months to visualize their progress.
-  - **Maintaining Motivation:** A user checks their "Streak" on the home screen to see how many consecutive days/weeks they have worked out, motivating them not to miss a session.
-  - **Managing Profile:** A user navigates to their profile to update their username or upload a new profile picture.
+  - **Reviewing Progress:** A user navigates to the History screen to review a workout from last week or filters to see all their "Bench Press" sessions from the last three months.
+  - **Maintaining Motivation:** A user checks their "Streak" on the home screen to see how many consecutive days they have worked out, motivating them not to miss a session.
 
----
+## 🛠️ Tech Stack & Architecture
 
-### 5. Features List
-- **Dual Authentication:** Secure user registration and login using both Firebase Authentication and Supabase Auth.
-- **Live Workout Tracking:** Start, track, and save a workout session in real-time.
-- **Exercise Management:** Add exercises to a workout session from a predefined database.
-- **Set & Rep Logging:** Dynamically add/edit/delete sets (with weight and reps) for each exercise during a session.
-- **Workout History:** A detailed, chronological log of all past workout sessions with summaries.
-- **Session Detail View:** A drill-down view to see every set and rep from a completed workout.
-- **Motivational Streak Tracker:** A visual component (e.g., calendar/chart) to display workout consistency.
-- **Local Notifications:** Service to handle local reminders (powered by `awesome_notifications`).
+### Architecture Pattern
+The project follows an **Native MVVM (Model-View-ViewModel)** pattern, organized by feature (`/features` directory) with a clear separation of UI (`view`), business logic (`viewmodel`), and data services (`repository`).
 
----
+### Core Technologies
+- **Framework**: [Flutter](https://flutter.dev/)
+- **Language**: [Dart](https://dart.dev/)
+- **Backend & Database (BaaS)**:
+  - **Firebase**
+    - **Authentication**: For email/password and social logins.
+    - **Firestore**: Primary NoSQL database for workout sessions, history, and user data.
+  - **Supabase**
+    - **Authentication**: (Alternative or supplementary auth)
+    - **PostgreSQL Database**: (Used alongside Firestore for specific data)
+    - **Storage**: For exercise images and other media.
+- **State Management**:
+  - **Provider**: For simple and efficient application state management.
 
-### 6. Technical Details
-- **Architecture Pattern:** MVVM (Model-View-ViewModel), organized by feature (`/features` directory) with a clear separation of UI (`view`), business logic (`viewmodel`), and data services (`repository`).
-- **Key Packages/Dependencies:**
-  - `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage` (Firebase integration)
-  - `supabase_flutter` (Supabase integration)
-  - `provider` (State Management)
-  - `fl_chart` (For data visualization, e.g., streaks/history)
-  - `image_picker` (For profile picture selection)
-  - `awesome_notifications` (For local notifications)
-  - `google_fonts` (For UI typography)
-- **Database/Storage:**
-  - **Database:** Cloud Firestore (Primary) and Supabase PostgreSQL (Secondary/Alternative).
-  - **Storage:** Firebase Storage (for user-uploaded profile pictures).
-- **Other Integrations:** N/A
+### Technical Complexity
+The project's complexity is centered on a few key areas:
+1.  **Dual Backend Integration:** Manages authentication and data services for both Firebase (Firestore/Storage) and Supabase (PostgreSQL/Auth).
+2.  **Real-time State Management:** Uses `provider` to manage the complex, nested state of a "live" workout session (session -> exercises -> sets) before committing it to the database.
+3.  **Data-Driven UI:** Features dynamic UIs built from fetched data, including charts (`fl_chart`) and user-uploaded content.
 
----
+## 🚀 Installation & Setup
 
-### 7. Deliverable-Specific Requirements
+To run this project locally, follow these steps:
 
-#### If GitHub Repo (App without publishing):
-- The repository includes a comprehensive `README.md` with project setup and build instructions.
-- The repository's [Releases Page](https://github.com/muhammadsuheil/gymbros/releases) will host downloadable APK builds for testing.
-- The application contains 10+ distinct pages/screens (e.g., Login, Register, Home, Workout Tracking, History, Session Detail, Profile, Streak, Exercise Selection, Workout Summary), each composed of 5+ widgets.
-- The app meets first-stage production quality, featuring a complete, database-backed workflow from authentication to data logging and retrieval.
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/muhammadsuheil/gymbros.git](https://github.com/muhammadsuheil/gymbros.git)
+    cd gymbros
+    ```
 
----
+2.  **Install Flutter dependencies**
+    ```bash
+    flutter pub get
+    ```
 
-### 8. Complexity Plan
-The technical complexity of this project is centered around a few key areas:
-1.  **Dual Backend Integration:** The app integrates with *two* major BaaS platforms: **Firebase and Supabase**. This requires managing authentication, data models, and API calls for both services, which is significantly more complex than using a single backend.
-2.  **Real-time State Management:** The workout tracking screen requires robust state management (`provider`) to handle a "live" workout session. This includes managing a complex, nested state object (session -> exercises -> sets) in memory before it is committed to the database upon completion.
-3.  **Data-Driven UI:** The app is not static; it dynamically builds UIs based on data fetched from Firestore/Supabase. This includes rendering lists of past workouts, building charts with `fl_chart` based on user data, and managing user-uploaded content like profile pictures.
-4.  **Local Services:** Implementation of local push notifications (`awesome_notifications`) adds a layer of native integration for user engagement and reminders.
+3.  **Setup Backend Services (Firebase & Supabase)**
+    - **Firebase:**
+      - Create a new project on the [Firebase Console](https://console.firebase.google.com/).
+      - Add an Android and/or iOS app to your Firebase project.
+      - Download your configuration files:
+        - For Android: `google-services.json` and place it in `android/app/`.
+        - For iOS: `GoogleService-Info.plist` and place it in `ios/Runner/`.
+      - In the Firebase console, enable the following services:
+        - **Authentication** (Enable Email/Password method).
+        - **Cloud Firestore** (Create database).
+        - **Storage** (Create a storage bucket).
+    - **Supabase:**
+      - Create a new project on [Supabase](https://supabase.com/).
+      - Go to your project's **Settings** > **API**.
+      - Create a `.env` file in the root of the project (or add to your environment variables) with your Supabase URL and Anon Key. (You will need to modify the code to read these, e.g., using `flutter_dotenv`).
+        ```
+        SUPABASE_URL=YOUR_SUPABASE_URL
+        SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+        ```
 
----
+4.  **Create Splash Screen (Optional)**
+    If you make changes to `native_splash.yaml`, run:
+    ```bash
+    flutter pub run flutter_native_splash:create
+    ```
+
+5.  **Run the App**
+    ```bash
+    flutter run
+    ```
+
+## 👨‍💻 Contributor
+
+- **[Muhammad Suheil](https://github.com/muhammadsuheil)**

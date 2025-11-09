@@ -65,10 +65,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: AppColors.primary, 
                           ),
                        child: const Text('Logout', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-                       onPressed: () {
-                         Navigator.of(dialogContext).pop(); 
-                         authViewModel.signOut();
-                         print("[ProfileScreen] Logout called, waiting for AuthWrapper to navigate...");
+                       onPressed: () async { 
+                          Navigator.of(dialogContext).pop();
+                          try {
+                            await authViewModel.signOut();
+                            
+                            print("[ProfileScreen] Logout successful, waiting for AuthWrapper...");
+
+                          } catch (e) {
+                            print("[ProfileScreen] Logout failed: $e");
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Logout gagal: ${e.toString().replaceFirst('Exception: ', '')}"),
+                                  backgroundColor: AppColors.error,
+                                ),
+                              );
+                            }
+                          }
                        },
                      ),
                    ],
